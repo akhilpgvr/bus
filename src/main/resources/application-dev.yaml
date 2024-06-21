@@ -1,0 +1,23 @@
+server:
+  port: 9991
+  servlet:
+    context path: "/bus/mgmt/v1"
+
+spring:
+  application:
+    name: bus
+  mvc:
+    path match:
+      matching-strategy: ant-path-matcher
+
+  data:
+    mongodb:
+      user: admin
+      password: admin
+      database: bus-booking-system
+      uri: mongodb://localhost:27017
+#config:
+#  rest:
+#    service:
+#      encryptionKey: "keycodevalue"
+
