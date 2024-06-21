@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.managementidea</groupId>
-	<artifactId>user</artifactId>
+	<artifactId>bus</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>user</name>
+	<name>bus</name>
 	<description>bus application for Bus Booking System</description>
 	<properties>
 		<java.version>21</java.version>
@@ -55,6 +55,7 @@
 			<artifactId>springfox-boot-starter</artifactId>
 			<version>3.0.0</version>
 		</dependency>
+
 	</dependencies>
 
 	<build>
