@@ -16,6 +16,17 @@ spring:
       password: admin
       database: bus-booking-system
       uri: mongodb://localhost:27017
+config:
+  rest:
+    service:
+      user-url: "http://localhost:9990/user/mgmt/v1"
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic
 #config:
 #  rest:
 #    service:
