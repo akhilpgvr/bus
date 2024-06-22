@@ -2,5 +2,5 @@ package com.managementidea.bus.model.enums;
 
 public enum BusTypeEnum {
 
-    AC, NON_AC, SLEEPER, SEMI_SLEEPER, LUXURY
+    FAST_PASSENGER, SUPER_FAST, LUXURY, SLEEPER, MINI_BUS;
 }

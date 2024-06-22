@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 @Data
 @AllArgsConstructor
@@ -21,4 +22,6 @@ public class BusRoutesEntity {
 
     private String busRegNo;
     private Set<RouteInfo> routeInfo;
+    private LocalDateTime createdOn;
+    private LocalDateTime lastUpdatedOn;
 }

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
@@ -26,6 +27,9 @@ public class BusInfoEntity {
     private String busRegNo;
     private String busRegId;
     private BusTypeEnum busType;
-    private String Capacity;
+    private int Capacity;
     private EmployeeDetails employeeDetails;
+
+    private LocalDateTime createdOn;
+    private LocalDateTime lastUpdatedOn;
 }
