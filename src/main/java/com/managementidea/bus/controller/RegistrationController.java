@@ -1,8 +1,6 @@
 package com.managementidea.bus.controller;
 
-import com.managementidea.bus.service.client.UserClient;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import com.managementidea.bus.model.request.AddBusRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,11 +8,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/register")
 public class RegistrationController {
 
-    @Autowired
-    private UserClient userClient;
+    @PostMapping("/add-bus")
+    public ResponseEntity<Void> addBus(@RequestParam String mobileNo, @RequestBody AddBusRequest request){
 
-    @GetMapping("/test")
-    public ResponseEntity<Object> busRegister(@RequestParam String mobileNo){
-        return new ResponseEntity<>(userClient.findByMobileNo(mobileNo), HttpStatus.OK);
     }
+
 }
