@@ -11,6 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "UserManagementClient", url = "${config.rest.service.user-url}")
 public interface UserClient {
 
-    @GetMapping("find-by/mobnusertype/{mobileNo}")
+    @GetMapping("/internal/find-by/mobno-usertype/{mobileNo}")
     ResponseEntity<FindByMobileResponse> findByMobileNoAndUserType(@PathVariable(name = "mobileNo") String mobileNo, @RequestParam UserTypeEnum userType);
 }

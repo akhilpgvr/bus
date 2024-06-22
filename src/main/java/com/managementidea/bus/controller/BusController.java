@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -18,6 +19,7 @@ public class BusController {
     @Autowired
     private BusService busService;
 
+
     @GetMapping("/by-mobileNo")
     public ResponseEntity<List<BusReqResDTO>> getBusInfoByMobileNo (@RequestParam String mobileNo) {
 
@@ -25,7 +27,7 @@ public class BusController {
         return new ResponseEntity<>(busService.getBusesByMobileNo(mobileNo), HttpStatus.OK);
     }
     @PostMapping("/add-bus")
-    public ResponseEntity<Void> addBus(@RequestParam String mobileNo, @RequestBody List<BusReqResDTO> request){
+    public ResponseEntity<Void> addBus(@RequestParam String mobileNo, @RequestBody Set<BusReqResDTO> request){
 
         log.info("add a new bus details for mobileNo: {}", mobileNo);
         return new ResponseEntity<>(busService.addNewBus(mobileNo, request), HttpStatus.OK);
