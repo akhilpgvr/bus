@@ -84,6 +84,7 @@ public class BusService {
 
                 BusInfoEntity busInfo = new BusInfoEntity();
                 BeanUtils.copyProperties(i, busInfo);
+                busInfo.setMobileNo(mobileNo);
                 busInfo.setCapacity(getSeatCapacity(i.getBusType()));
                 busInfo.setCreatedOn(LocalDateTime.now());
                 busInfo.setLastUpdatedOn(LocalDateTime.now());
