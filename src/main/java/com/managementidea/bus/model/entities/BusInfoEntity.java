@@ -26,7 +26,6 @@ public class BusInfoEntity {
     private String busRegId;
     private BusTypeEnum busType;
     private int Capacity;
-    private EmployeeDetails employeeDetails;
 
     private LocalDateTime createdOn;
     private LocalDateTime lastUpdatedOn;

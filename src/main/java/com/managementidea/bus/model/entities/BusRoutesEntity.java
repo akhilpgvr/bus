@@ -22,6 +22,7 @@ public class BusRoutesEntity {
 
     private String busRegNo;
     private Set<RouteInfo> routeInfo;
+
     private LocalDateTime createdOn;
     private LocalDateTime lastUpdatedOn;
 }

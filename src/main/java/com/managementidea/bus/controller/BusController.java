@@ -1,6 +1,7 @@
 package com.managementidea.bus.controller;
 
-import com.managementidea.bus.model.dtos.BusReqResDTO;
+import com.managementidea.bus.model.dtos.reponse.BusInfoResponse;
+import com.managementidea.bus.model.dtos.request.AddBusInfoRequest;
 import com.managementidea.bus.service.BusService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ public class BusController {
 
     @Operation(summary = "Api to get bus list of owner", description = "")
     @GetMapping("/by-mobileNo")
-    public ResponseEntity<List<BusReqResDTO>> getBusInfoByMobileNo (@RequestParam String mobileNo) {
+    public ResponseEntity<List<BusInfoResponse>> getBusInfoByMobileNo (@RequestParam String mobileNo) {
 
         log.info("find buses of owner: {}", mobileNo);
         return new ResponseEntity<>(busService.getBusesByMobileNo(mobileNo), HttpStatus.OK);
@@ -31,7 +32,7 @@ public class BusController {
 
     @Operation(summary = "APi for adding new bus details", description = "")
     @PostMapping("/add-bus")
-    public ResponseEntity<Void> addBus(@RequestParam String mobileNo, @RequestBody Set<BusReqResDTO> request){
+    public ResponseEntity<Void> addBus(@RequestParam String mobileNo, @RequestBody Set<AddBusInfoRequest> request){
 
         log.info("add a new bus details for mobileNo: {}", mobileNo);
         return new ResponseEntity<>(busService.addNewBus(mobileNo, request), HttpStatus.OK);

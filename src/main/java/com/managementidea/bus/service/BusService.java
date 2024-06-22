@@ -2,7 +2,8 @@ package com.managementidea.bus.service;
 
 import com.managementidea.bus.exceptions.BusInfoExistsException;
 import com.managementidea.bus.exceptions.IncorrectBusRegNoException;
-import com.managementidea.bus.model.dtos.BusReqResDTO;
+import com.managementidea.bus.model.dtos.reponse.BusInfoResponse;
+import com.managementidea.bus.model.dtos.request.AddBusInfoRequest;
 import com.managementidea.bus.model.dtos.reponse.FindByMobileResponse;
 import com.managementidea.bus.model.entities.BusInfoEntity;
 import com.managementidea.bus.model.enums.BusTypeEnum;
@@ -60,14 +61,14 @@ public class BusService {
         return userClient.findByMobileNoAndUserType(mobileNo, userType).getBody();
     }
 
-    public List<BusReqResDTO> getBusesByMobileNo(String mobileNo) {
+    public List<BusInfoResponse> getBusesByMobileNo(String mobileNo) {
 
         log.info("querying all buses with mobileNo: {}", mobileNo);
         List<BusInfoEntity> buses = busInfoRepo.findByMobileNo(mobileNo);
-        return buses.stream().map(i-> modelMapper.map(i, BusReqResDTO.class)).toList();
+        return buses.stream().map(i-> modelMapper.map(i, BusInfoResponse.class)).toList();
     }
 
-    public Void addNewBus(String mobileNo, Set<BusReqResDTO> request) {
+    public Void addNewBus(String mobileNo, Set<AddBusInfoRequest> request) {
 
         log.info("check for the owner integrity");
         getUserByMobileNoAndUserType(mobileNo, UserTypeEnum.BUS_OWNER); // user must be owner
