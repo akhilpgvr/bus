@@ -1,4 +1,4 @@
-package com.managementidea.bus.model.request;
+package com.managementidea.bus.model.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.managementidea.bus.model.backOffice.EmployeeDetails;
@@ -13,7 +13,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddBusRequest {
+public class BusRequestDTO {
 
     @JsonIgnore
     private String mobileNo;
