@@ -59,7 +59,7 @@ public class RouteService {
             log.info("checking for arrivalDate");
             Criteria finalCriteria = regNoCriteria.orOperator(
                     Criteria.where("routeInfo.departureDate").gte(route.getDepartureDate()).andOperator(Criteria.where("routeInfo.arrivalDate").lte(route.getArrivalDate())),
-                    Criteria.where("routeInfo.departureDate").lte(route.getDepartureDate()).andOperator(Criteria.where("routeInfo.arrivalDate").gte(route.getArrivalDate())),
+                    Criteria.where("routeInfo.departureDate").lte(route.getDepartureDate()).andOperator(Criteria.where("routeInfo.arrivalDate").gte(route.getDepartureDate())),
                     Criteria.where("routeInfo.departureDate").lte(route.getArrivalDate()).andOperator(Criteria.where("routeInfo.arrivalDate").gte(route.getArrivalDate()))
             );
             query.addCriteria(finalCriteria);
