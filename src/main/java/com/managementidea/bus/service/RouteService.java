@@ -29,16 +29,23 @@ public class RouteService {
     private BusRoutesRepo busRoutesRepo;
     @Autowired
     private MongoTemplate mongoTemplate;
+    @Autowired
+    private BusService busService;
+
 
     public Void addNewRoute(BusRouteDTO request) {
 
         String regNo = request.getBusRegNo();
+        log.info("checking bus is present");
+        busService.findByBusRegNo(regNo);
+
         request.getRouteInfo().forEach(route-> {
 
             log.info("Checking if the route is busy for given date");
             List<LocalDateTime> arrivalTimes = request.getRouteInfo().stream().map(RouteInfo::getArrivalDate).toList();
             checkForBusDuplicateRoutes(regNo, arrivalTimes);
         });
+
 
         BusRoutesEntity busRoute = new BusRoutesEntity();
         BeanUtils.copyProperties(request, busRoute);
