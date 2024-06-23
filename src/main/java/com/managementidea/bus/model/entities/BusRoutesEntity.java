@@ -13,7 +13,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "bus-routes-info")
+@Document(collection = "bus-routes")
 public class BusRoutesEntity {
 
     @Id

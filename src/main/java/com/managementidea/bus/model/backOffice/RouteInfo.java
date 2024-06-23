@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -17,7 +20,8 @@ public class RouteInfo {
     private String destination;
     private Set<String> stops;   //<stops>
     private HashMap<String, String> fares;  //<destination, fare>
-    private String departureDate;
-    private String arrivalDate;
+    private LocalDateTime departureDate;
+    private LocalDateTime arrivalDate;
     private Set<String> daysOfOperation;
+    private EmployeeDetails employeeDetails;
 }

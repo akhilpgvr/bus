@@ -15,5 +15,4 @@ public class BusRouteDTO {
 
     private String busRegNo;
     private Set<RouteInfo> routeInfo;
-    private EmployeeDetails employeeDetails;
 }
