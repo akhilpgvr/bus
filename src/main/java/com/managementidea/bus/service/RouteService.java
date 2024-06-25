@@ -15,9 +15,11 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+import org.springframework.util.RouteMatcher;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -94,9 +96,14 @@ public class RouteService {
     public Void deleteRoute(DeleteRouteRequest request) {
 
         Query query = new Query(Criteria.where("busRegNo").is(request.getBusRegNo()));
-        Update update = new Update().pull("routeInfo", new Query(Criteria.where("routeInfo.departureDate").is(request.getDepartureDate()).andOperator(Criteria.where("routeInfo.arrivalDate").is(request.getArrivalDate()))));
-        log.info("query for finding data: {}", update);
-        mongoTemplate.updateFirst(query, update, BusRoutesEntity.class);
+        BusRoutesEntity busRoutes = mongoTemplate.findOne(query, BusRoutesEntity.class);
+        if(Objects.nonNull(busRoutes)) {
+            Optional<RouteInfo> route = busRoutes.getRouteInfo().stream().filter(i-> i.getDepartureDate().equalsIgnoreCase(request.getDepartureDate()) && i.getArrivalDate().equalsIgnoreCase(request.getArrivalDate())).findFirst();
+            if(route.isPresent()) {
+                busRoutes.getRouteInfo().remove(route.get());
+                busRoutesRepo.save(busRoutes);
+            }
+        }
         return null;
     }
 }

@@ -18,7 +18,7 @@ public class BusRoutesEntity {
 
     @Id
     @Generated
-    private String Id;
+    private String id;
 
     private String busRegNo;
     private Set<RouteInfo> routeInfo;
