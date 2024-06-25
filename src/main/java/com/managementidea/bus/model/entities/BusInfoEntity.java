@@ -1,6 +1,5 @@
 package com.managementidea.bus.model.entities;
 
-import com.managementidea.bus.model.backOffice.EmployeeDetails;
 import com.managementidea.bus.model.enums.BusTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
