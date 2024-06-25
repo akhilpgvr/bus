@@ -43,6 +43,7 @@ public class BusService {
             throw new IncorrectBusRegNoException("BusInfo not present for: "+busRegNo);
         }
     }
+
     public int getSeatCapacity(BusTypeEnum busType) {
 
         log.info("checking capacity for {}", busType);
