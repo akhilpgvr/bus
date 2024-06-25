@@ -98,8 +98,10 @@ public class RouteService {
         Query query = new Query(Criteria.where("busRegNo").is(request.getBusRegNo()));
         BusRoutesEntity busRoutes = mongoTemplate.findOne(query, BusRoutesEntity.class);
         if(Objects.nonNull(busRoutes)) {
+            log.info("checking for route is present");
             Optional<RouteInfo> route = busRoutes.getRouteInfo().stream().filter(i-> i.getDepartureDate().equalsIgnoreCase(request.getDepartureDate()) && i.getArrivalDate().equalsIgnoreCase(request.getArrivalDate())).findFirst();
             if(route.isPresent()) {
+                log.info("removing the route");
                 busRoutes.getRouteInfo().remove(route.get());
                 busRoutesRepo.save(busRoutes);
             }
