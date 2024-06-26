@@ -1,6 +1,7 @@
 package com.managementidea.bus.service;
 
 import com.managementidea.bus.exceptions.BusAlreadyInRouteException;
+import com.managementidea.bus.exceptions.RouteNotExistsException;
 import com.managementidea.bus.model.backOffice.RouteInfo;
 import com.managementidea.bus.model.dtos.BusRouteDTO;
 import com.managementidea.bus.model.dtos.request.DeleteRouteRequest;
@@ -91,5 +92,13 @@ public class RouteService {
 
         log.info("checking for buses for the given origin-destination and departureDate-arrivalDate");
         return null;
+    }
+
+    public List<RouteInfo> getRoutesByBusRegNo(String busRegNo) {
+
+        log.info("fetching routes for the given busRegNo");
+        List<BusRoutesEntity> routes = busRoutesRepo.findByBusRegNo(busRegNo);
+        if(routes.isEmpty()) throw new RouteNotExistsException("No routes present for given bus: "+ busRegNo);
+        return routes.stream().map(BusRoutesEntity::getRouteInfo).toList();
     }
 }

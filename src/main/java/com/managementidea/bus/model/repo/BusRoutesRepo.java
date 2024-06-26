@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface BusRoutesRepo extends MongoRepository<BusRoutesEntity, String> {
 
+    List<BusRoutesEntity> findByBusRegNo(String busRegNo);
 }

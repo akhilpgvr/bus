@@ -1,5 +1,6 @@
 package com.managementidea.bus.controller;
 
+import com.managementidea.bus.model.backOffice.RouteInfo;
 import com.managementidea.bus.model.dtos.BusRouteDTO;
 import com.managementidea.bus.model.dtos.request.DeleteRouteRequest;
 import com.managementidea.bus.service.RouteService;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -25,6 +28,13 @@ public class RoutesController {
 
         log.info("adding new route for {}", request.getBusRegNo());
         return new ResponseEntity<>(routeService.addNewRoute(request), HttpStatus.OK);
+    }
+
+    @GetMapping("/routes-of-bus/{busRegNo}")
+    public ResponseEntity<List<RouteInfo>> getRoutesByBusRegNo(@PathVariable(name = "busRegNo") String busRegNo) {
+
+        log.info("Get routes by busRegNo for {}", busRegNo);
+        return new ResponseEntity<>(routeService.getRoutesByBusRegNo(busRegNo), HttpStatus.OK);
     }
 
     @PutMapping("/update-route/{busRegNo}")
