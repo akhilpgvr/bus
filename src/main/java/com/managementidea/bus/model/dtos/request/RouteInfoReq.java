@@ -1,5 +1,7 @@
-package com.managementidea.bus.model.backOffice;
+package com.managementidea.bus.model.dtos.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.managementidea.bus.model.backOffice.EmployeeDetails;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +13,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RouteInfo {
+public class RouteInfoReq {
 
     private String origin;
     private String destination;
@@ -19,6 +21,7 @@ public class RouteInfo {
     private HashMap<String, String> fares;  //<destination, fare>
     private String departureDate;
     private String arrivalDate;
+    @JsonIgnore
     private int availableSeats;
     private EmployeeDetails employeeDetails;
 }

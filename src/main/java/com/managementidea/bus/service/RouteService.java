@@ -5,21 +5,27 @@ import com.managementidea.bus.exceptions.RouteNotExistsException;
 import com.managementidea.bus.model.backOffice.RouteInfo;
 import com.managementidea.bus.model.dtos.BusRouteDTO;
 import com.managementidea.bus.model.dtos.request.DeleteRouteRequest;
+import com.managementidea.bus.model.dtos.request.RouteInfoReq;
+import com.managementidea.bus.model.entities.BusInfoEntity;
 import com.managementidea.bus.model.entities.BusRoutesEntity;
 import com.managementidea.bus.model.repo.BusRoutesRepo;
+import com.managementidea.bus.utils.Helper;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.util.RouteMatcher;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -31,6 +37,8 @@ public class RouteService {
     private MongoTemplate mongoTemplate;
     @Autowired
     private BusService busService;
+    @Autowired
+    private ModelMapper modelMapper;
 
     public BusRoutesEntity findByBusRegNo(String busRegNo) {
 
@@ -47,7 +55,7 @@ public class RouteService {
 
         String regNo = request.getBusRegNo();
         log.info("checking bus is present");
-        busService.findByBusRegNo(regNo);
+        BusInfoEntity bus = busService.findByBusRegNo(regNo);
 
         Optional<BusRoutesEntity> busInfoRef = busRoutesRepo.findByBusRegNo(regNo);
         request.getRouteInfo().forEach(route-> {
@@ -58,11 +66,14 @@ public class RouteService {
 
         if(busInfoRef.isPresent()){
 
-            busInfoRef.get().getRouteInfo().addAll(request.getRouteInfo());
+            Set<RouteInfo> routeInfos = request.getRouteInfo().stream().map(i-> modelMapper.map(i, RouteInfo.class)).collect(Collectors.toSet());
+            routeInfos.forEach(i-> i.setAvailableSeats(bus.getCapacity()));
+            busInfoRef.get().getRouteInfo().addAll(routeInfos);
             busInfoRef.get().setLastUpdatedOn(LocalDateTime.now());
             busRoutesRepo.save(busInfoRef.get());
         }else {
             BusRoutesEntity busRoute = new BusRoutesEntity();
+            request.getRouteInfo().forEach(i-> i.setAvailableSeats(bus.getCapacity()));
             BeanUtils.copyProperties(request, busRoute);
             busRoute.setCreatedOn(LocalDateTime.now());
             busRoute.setLastUpdatedOn(LocalDateTime.now());
@@ -71,7 +82,7 @@ public class RouteService {
         return null;
     }
 
-    public void checkForBusDuplicateRoutes(String busRegNo, Set<RouteInfo> routeInfo) {
+    public void checkForBusDuplicateRoutes(String busRegNo, Set<RouteInfoReq> routeInfo) {
 
         log.info("checking for busRegNo");
         Criteria regNoCriteria = Criteria.where("busRegNo").is(busRegNo);

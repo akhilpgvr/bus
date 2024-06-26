@@ -1,6 +1,7 @@
 package com.managementidea.bus.model.dtos;
 
 import com.managementidea.bus.model.backOffice.RouteInfo;
+import com.managementidea.bus.model.dtos.request.RouteInfoReq;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,5 +14,5 @@ import java.util.Set;
 public class BusRouteDTO {
 
     private String busRegNo;
-    private Set<RouteInfo> routeInfo;
+    private Set<RouteInfoReq> routeInfo;
 }
