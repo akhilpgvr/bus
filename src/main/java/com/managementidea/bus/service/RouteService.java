@@ -19,6 +19,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -88,10 +90,18 @@ public class RouteService {
         return null;
     }
 
-    public Void getBusesOnRoute(String origin, String destination, String departureDate, String arrivalDate) {
+    public List<BusRoutesEntity> getBusesOnRoute(String origin, String destination, String departureDate) {
 
         log.info("checking for buses for the given origin-destination and departureDate-arrivalDate");
-        return null;
+        List<String> stops = Arrays.asList(origin, destination);
+
+        List<Criteria> criteriaList = new ArrayList<>();
+        criteriaList.add(Criteria.where("routeInfo.origin").is(origin).orOperator(Criteria.where("routeInfo.stops").in(origin)));
+        criteriaList.add(Criteria.where("routeInfo.destination").is(destination).orOperator(Criteria.where("routeInfo.stops").in(destination)));
+        criteriaList.add(Criteria.where("routeInfo.departureDate").is(departureDate));
+        Criteria criteria = new Criteria();
+        Query query = new Query(criteria.andOperator(criteriaList));
+        return mongoTemplate.find(query, BusRoutesEntity.class);
     }
 
     public List<RouteInfo> getRoutesByBusRegNo(String busRegNo) {
