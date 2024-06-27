@@ -90,18 +90,19 @@ public class RouteService {
         return null;
     }
 
-    public List<BusRoutesEntity> getBusesOnRoute(String origin, String destination, String departureDate) {
+    public List<RouteInfo> getBusesOnRoute(String origin, String destination, String departureDate) {
 
         log.info("checking for buses for the given origin-destination and departureDate-arrivalDate");
         List<String> stops = Arrays.asList(origin, destination);
 
+        log.info("adding criteria for searching buses");
         List<Criteria> criteriaList = new ArrayList<>();
         criteriaList.add(Criteria.where("routeInfo.origin").is(origin).orOperator(Criteria.where("routeInfo.stops").in(origin)));
         criteriaList.add(Criteria.where("routeInfo.destination").is(destination).orOperator(Criteria.where("routeInfo.stops").in(destination)));
         criteriaList.add(Criteria.where("routeInfo.departureDate").is(departureDate));
         Criteria criteria = new Criteria();
         Query query = new Query(criteria.andOperator(criteriaList));
-        return mongoTemplate.find(query, BusRoutesEntity.class);
+        return mongoTemplate.find(query, BusRoutesEntity.class).stream().map(i-> i.getRouteInfo()).toList();
     }
 
     public List<RouteInfo> getRoutesByBusRegNo(String busRegNo) {
