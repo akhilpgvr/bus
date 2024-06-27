@@ -4,6 +4,7 @@ import com.managementidea.bus.exceptions.BusAlreadyInRouteException;
 import com.managementidea.bus.exceptions.RouteNotExistsException;
 import com.managementidea.bus.model.backOffice.RouteInfo;
 import com.managementidea.bus.model.dtos.BusRouteDTO;
+import com.managementidea.bus.model.dtos.request.BookTicketRequest;
 import com.managementidea.bus.model.dtos.request.DeleteRouteRequest;
 import com.managementidea.bus.model.dtos.request.RouteInfoReq;
 import com.managementidea.bus.model.entities.BusInfoEntity;
@@ -19,10 +20,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -100,6 +98,7 @@ public class RouteService {
         criteriaList.add(Criteria.where("routeInfo.origin").is(origin).orOperator(Criteria.where("routeInfo.stops").in(origin)));
         criteriaList.add(Criteria.where("routeInfo.destination").is(destination).orOperator(Criteria.where("routeInfo.stops").in(destination)));
         criteriaList.add(Criteria.where("routeInfo.departureDate").is(departureDate));
+        criteriaList.add(Criteria.where("routeInfo.availableSeats").ne(0));
         Criteria criteria = new Criteria();
         Query query = new Query(criteria.andOperator(criteriaList));
         return mongoTemplate.find(query, BusRoutesEntity.class).stream().map(i-> i.getRouteInfo()).toList();
@@ -111,5 +110,22 @@ public class RouteService {
         List<BusRoutesEntity> routes = busRoutesRepo.findByBusRegNo(busRegNo);
         if(routes.isEmpty()) throw new RouteNotExistsException("No routes present for given bus: "+ busRegNo);
         return routes.stream().map(BusRoutesEntity::getRouteInfo).toList();
+    }
+
+    public Void bookTicket(BookTicketRequest request) {
+
+        log.info("");
+        Query query = new Query(Criteria.where("busRegNo").is(request.getBusRegNo()));
+        query.addCriteria(Criteria.where("routeInfo.origin").is(request.getOrigin()));
+        query.addCriteria(Criteria.where("routeInfo.departureDate").is(request.getDepartureDate()));
+        BusRoutesEntity busRoute = mongoTemplate.findOne(query, BusRoutesEntity.class);
+        if(Objects.nonNull(busRoute)) {
+            // create a booking entity and add the history of travelling
+            int seatsAvail = busRoute.getRouteInfo().getAvailableSeats()-1;
+            busRoute.getRouteInfo().setAvailableSeats(seatsAvail);
+            busRoutesRepo.save(busRoute);
+        }
+
+        return null;
     }
 }
