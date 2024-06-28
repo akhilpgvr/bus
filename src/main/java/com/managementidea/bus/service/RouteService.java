@@ -121,7 +121,7 @@ public class RouteService {
         BusRoutesEntity busRoute = mongoTemplate.findOne(query, BusRoutesEntity.class);
         if(Objects.nonNull(busRoute)) {
             // create a booking entity and add the history of travelling
-            int seatsAvail = busRoute.getRouteInfo().getAvailableSeats()-1;
+            int seatsAvail = busRoute.getRouteInfo().getAvailableSeats()-request.getNoOfSeats();
             busRoute.getRouteInfo().setAvailableSeats(seatsAvail);
             busRoutesRepo.save(busRoute);
         }

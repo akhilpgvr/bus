@@ -13,4 +13,5 @@ public class BookTicketRequest {
     private String busRegNo;
     private String origin;
     private String departureDate;
+    private int noOfSeats;
 }
