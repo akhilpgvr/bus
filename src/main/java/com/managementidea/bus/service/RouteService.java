@@ -114,17 +114,18 @@ public class RouteService {
 
     public Void bookTicket(BookTicketRequest request) {
 
-        log.info("");
         Query query = new Query(Criteria.where("busRegNo").is(request.getBusRegNo()));
         query.addCriteria(Criteria.where("routeInfo.origin").is(request.getOrigin()));
         query.addCriteria(Criteria.where("routeInfo.departureDate").is(request.getDepartureDate()));
+        log.info("quer: {}", query);
         BusRoutesEntity busRoute = mongoTemplate.findOne(query, BusRoutesEntity.class);
-        if(Objects.nonNull(busRoute)) {
-            // create a booking entity and add the history of travelling
-            int seatsAvail = busRoute.getRouteInfo().getAvailableSeats()-request.getNoOfSeats();
-            busRoute.getRouteInfo().setAvailableSeats(seatsAvail);
-            busRoutesRepo.save(busRoute);
-        }
+        if(Objects.isNull(busRoute)) throw new RouteNotExistsException("Route not exists for the given details");
+
+        // create a booking entity and add the history of travelling
+        log.info("booking {} seats", request.getNoOfSeats());
+        int seatsAvail = busRoute.getRouteInfo().getAvailableSeats()-request.getNoOfSeats();
+        busRoute.getRouteInfo().setAvailableSeats(seatsAvail);
+        busRoutesRepo.save(busRoute);
 
         return null;
     }
