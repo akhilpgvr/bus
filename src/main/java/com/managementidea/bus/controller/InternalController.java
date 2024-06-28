@@ -27,7 +27,7 @@ public class InternalController {
     }
 
     @PostMapping("/book-ticket")
-    public ResponseEntity<Void> bookTicket(@RequestBody BookTicketRequest request) {
+    public ResponseEntity<String> bookTicket(@RequestBody BookTicketRequest request) {
 
         log.info("booking ticket");
         return new ResponseEntity<>(routeService.bookTicket(request), HttpStatus.OK);

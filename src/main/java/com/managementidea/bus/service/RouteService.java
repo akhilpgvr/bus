@@ -95,8 +95,8 @@ public class RouteService {
 
         log.info("adding criteria for searching buses");
         List<Criteria> criteriaList = new ArrayList<>();
-        criteriaList.add(Criteria.where("routeInfo.origin").is(origin).orOperator(Criteria.where("routeInfo.stops").in(origin)));
-        criteriaList.add(Criteria.where("routeInfo.destination").is(destination).orOperator(Criteria.where("routeInfo.stops").in(destination)));
+        criteriaList.add(new Criteria().orOperator(Criteria.where("routeInfo.origin").is(origin), Criteria.where("routeInfo.stops").in(origin)));
+        criteriaList.add(new Criteria().orOperator(Criteria.where("routeInfo.destination").is(destination), Criteria.where("routeInfo.stops").in(destination)));
         criteriaList.add(Criteria.where("routeInfo.departureDate").is(departureDate));
         criteriaList.add(Criteria.where("routeInfo.availableSeats").ne(0));
         Criteria criteria = new Criteria();
@@ -112,12 +112,13 @@ public class RouteService {
         return routes.stream().map(BusRoutesEntity::getRouteInfo).toList();
     }
 
-    public Void bookTicket(BookTicketRequest request) {
+    public String bookTicket(BookTicketRequest request) {
 
         Query query = new Query(Criteria.where("busRegNo").is(request.getBusRegNo()));
         query.addCriteria(Criteria.where("routeInfo.origin").is(request.getOrigin()));
         query.addCriteria(Criteria.where("routeInfo.departureDate").is(request.getDepartureDate()));
-        log.info("quer: {}", query);
+        query.addCriteria(Criteria.where("routeInfo.availableSeats").gte(request.getNoOfSeats()));
+        log.info("query: {}", query);
         BusRoutesEntity busRoute = mongoTemplate.findOne(query, BusRoutesEntity.class);
         if(Objects.isNull(busRoute)) throw new RouteNotExistsException("Route not exists for the given details");
 
@@ -127,6 +128,6 @@ public class RouteService {
         busRoute.getRouteInfo().setAvailableSeats(seatsAvail);
         busRoutesRepo.save(busRoute);
 
-        return null;
+        return busRoute.getRouteInfo().getFares().get(request.getDestination());
     }
 }
